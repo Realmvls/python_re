@@ -1,0 +1,79 @@
+Python 使用正则表达式筛选内容
+        之前说过，使用urllib和urllib2，只是为了获取指定URL的html内容，而对内容进行解析和筛选，则需要借助python中的正则表达式来完成。
+
+ 
+
+一、预备知识：
+
+1.正则表达式简述：
+
+        什么是正则表达式？正则表达式就是可以匹配文本片段的模式，最简单的正则表达式就是一个字符串，用于在文本中匹配到此字符串自身。
+
+ 
+
+2.常用正则表达式：
+
+        设计正则表达式的时候有几个注意点如下：
+
+a.特殊符号需要加转移符：如要匹配'china.com'，则正则表达式格式应为'china\\.com'；
+
+b.字符集（使用中括号[]来包含字符串组成字符集）：如[a-z]表示匹配从a到z之间的字符；此外，还有一个反转字符集，使用^符号开头：如[^abc]表示匹配除了a、b、c三个字符之外的字符；
+
+c.选择符：如要匹配'python'和'page'，写出来的模式为'python|page'，其中‘|’是管道符号；
+
+d.子模式：如‘p(ython|age)’；
+
+e.可选项：在模式后面加上问好(?)，那该模式就变成了可选项，即其可能出现在匹配到的字符串中，但是并非必须的，如r'(http://)?(www.)?shuhe.com'可匹配的结果有：
+
+        http://www.shuhe.com、http://shuhe.com、www.shuhe.com、shuhe.com
+
+f.重复子模式：
+
+        (pattern)*：允许模式重复0次或多次
+
+        (pattern)+：允许模式重复1次或多次
+
+        (pattern){m,n}：允许模式重复m~n次
+
+例如：
+
+        r'w*\.python\.org'匹配'www.python.org'、'.python.org'、'wwwwww.python.org'
+
+        r'w+\.python\.org'匹配'w.python.org'；但不匹配'.python.org'
+
+        r'w{3,4}\.python\.org'只能匹配'www.python.org'和'wwww.python.org'
+
+ 
+
+二、re模板的使用：
+
+        在python中封装了一些常用的正则表达式在re模板中，使用时只需将该模板引入到当前项目中即可：
+
+        
+
+        上述是re中常用的正则表达式，使用步骤为：
+
+        1.先将正则表达式的字符串形式编译为Pattern实例；
+
+        2.然后使用Pattern实例处理文本并获得匹配结果（一个Match实例）；
+
+        3.最后使用Match实例获得信息，进行其他的操作。
+
+例如：
+
+复制代码
+# encoding: UTF-8  
+import re  
+   
+# 将正则表达式编译成Pattern对象  
+pattern = re.compile(r'hello')  
+   
+# 使用Pattern匹配文本，获得匹配结果，无法匹配时将返回None  
+match = pattern.match('hello world!')  
+   
+if match:  
+    # 使用Match获得分组信息  
+    print match.group()  
+   
+### 输出 ###  
+# hello
